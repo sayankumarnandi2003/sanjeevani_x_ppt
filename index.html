@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjeevani x AI - Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrolling, handle navigation via JS */
+            background-color: #f0f4f8;
+        }
+
+        .slide-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: translateX(50px);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-50px);
+            z-index: 5;
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            height: 90%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Title Slide Specifics */
+        .title-slide {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .title-slide h1 {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            z-index: 50;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover {
+            background: #1e3a8a;
+            transform: translateY(-2px);
+        }
+
+        .control-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 6px;
+            background: #2563eb;
+            transition: width 0.3s ease;
+            z-index: 60;
+        }
+
+        /* Custom Scrollbar for slide content */
+        .slide-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .slide-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .slide-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .slide-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Bullet points animation */
+        .bullet-point {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Icon boxes */
+        .feature-box {
+            background: #f8fafc;
+            border-left: 5px solid #2563eb;
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slide-container" id="slideContainer">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="flex flex-col items-center justify-center h-full space-y-6">
+                <div class="bg-white/10 p-4 rounded-full mb-4 backdrop-blur-sm">
+                    <i class="fas fa-heartbeat text-6xl text-white"></i>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+                    Artificial Intelligence-Driven<br>Healthcare for India
+                </h1>
+                <h2 class="text-xl md:text-2xl font-light text-blue-100">
+                    A Comprehensive Review & Proposal of the <br>
+                    <span class="font-bold text-white">"Sanjeevani x AI"</span> Integrated Platform
+                </h2>
+                <div class="mt-12 bg-white/10 p-6 rounded-xl backdrop-blur-sm text-center">
+                    <p class="text-lg font-semibold">Presented by:</p>
+                    <p class="text-xl mt-2">Sayan Kumar Nandi, Anuj Vishwakarma,</p>
+                    <p class="text-xl">Alok Shahi, Harsh Sharma</p>
+                    <p class="text-sm mt-4 text-blue-200">KCC Institute of Technology & Management</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem Statement -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-red-500">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 mr-4"></i>
+                    The Indian Healthcare Paradox
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                    <div class="space-y-6 text-lg text-gray-600">
+                        <p class="bullet-point delay-1">India faces a critical dual challenge: managing a massive population of 1.4 billion while battling a shortage of medical infrastructure.</p>
+                        
+                        <div class="feature-box bullet-point delay-2 border-l-red-500 bg-red-50">
+                            <h3 class="font-bold text-red-800">Critical Statistics</h3>
+                            <ul class="list-disc pl-5 mt-2 space-y-2">
+                                <li><strong>Doctor-Patient Ratio:</strong> Significantly lower than WHO recommendations (1:1000).</li>
+                                <li><strong>Rural-Urban Divide:</strong> 70% of infrastructure is in cities, but 65% of the population lives in rural areas.</li>
+                                <li><strong>Diagnostic Delays:</strong> Leading cause of preventable mortality in TB and Cancer cases.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center bg-gray-100 rounded-xl p-4 bullet-point delay-3">
+                        <div class="text-center">
+                            <i class="fas fa-hospital-user text-6xl text-gray-400 mb-4"></i>
+                            <p class="font-semibold text-gray-500">Infrastructure Strain</p>
+                            <div class="mt-4 w-full bg-gray-300 h-4 rounded-full overflow-hidden">
+                                <div class="bg-red-500 h-full" style="width: 85%"></div>
+                            </div>
+                            <p class="text-xs mt-1 text-gray-500">Resource Utilization: Critical</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: The Solution - Sanjeevani x AI -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-green-500">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-seedling text-green-500 mr-4"></i>
+                    Introducing: Sanjeevani x AI
+                </h2>
+                <p class="text-xl text-gray-600 mb-8">An Integrated Health Intelligence Platform designed specifically for the Indian demographic.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center bullet-point delay-1 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-stethoscope text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Preventive Care</h3>
+                        <p class="text-sm text-gray-500">Early disease detection using predictive modeling.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center bullet-point delay-2 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-network-wired text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Resource Optimization</h3>
+                        <p class="text-sm text-gray-500">Smart allocation of hospital beds, oxygen, and staff.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center bullet-point delay-3 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-universal-access text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Accessibility</h3>
+                        <p class="text-sm text-gray-500">Multilingual support bridging the language barrier.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-4 bg-green-50 rounded-lg border border-green-200 bullet-point delay-4">
+                    <p class="text-center text-green-800 font-semibold">
+                        "Moving from Reactive Healthcare to Proactive Health Intelligence"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Core Module 1 - Diagnostic AI -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-blue-600">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Core Module: Diagnostic AI</h2>
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <div class="flex-1 space-y-6">
+                        <div class="feature-box bullet-point delay-1">
+                            <h3 class="font-bold text-lg text-blue-800"><i class="fas fa-x-ray mr-2"></i>Automated Radiology</h3>
+                            <p class="text-gray-600 mt-2">Utilizing Deep Learning (CNNs, ResNet) to analyze X-rays and MRIs for:</p>
+                            <ul class="list-disc pl-5 mt-1 text-sm text-gray-600">
+                                <li>Tuberculosis (TB) screening</li>
+                                <li>Pneumonia detection</li>
+                                <li>Early stage tumor identification</li>
+                            </ul>
+                        </div>
+                        <div class="feature-box bullet-point delay-2 border-l-pink-500 bg-pink-50">
+                            <h3 class="font-bold text-lg text-pink-800"><i class="fas fa-microscope mr-2"></i>Onco-Pathology</h3>
+                            <p class="text-gray-600 mt-2">AI-assisted histopathology analysis for Breast Cancer detection, reducing false negatives and improving biopsy turnaround times.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 bg-gray-900 rounded-xl p-4 text-green-400 font-mono text-xs shadow-inner bullet-point delay-3">
+                        <div class="mb-2 border-b border-gray-700 pb-2">AI Model Confidence Log</div>
+                        <p>> Loading ChestX-ray14 dataset...</p>
+                        <p>> Initializing DenseNet-121...</p>
+                        <p>> Analysis complete.</p>
+                        <p class="text-white mt-2">Prediction:</p>
+                        <p>> Pneumonia: <span class="text-red-400">98.4%</span></p>
+                        <p>> Normal: 1.6%</p>
+                        <div class="mt-4 h-32 bg-gray-800 rounded flex items-center justify-center text-gray-500">
+                            [Simulated X-Ray Heatmap]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Core Module 2 - Operational AI -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-indigo-600">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Core Module: Operational AI</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <p class="text-gray-600 text-lg mb-4 bullet-point delay-1">Addressing the administrative bottlenecks that cause treatment delays.</p>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg bullet-point delay-2">
+                            <h3 class="font-bold text-indigo-700 mb-2">Predictive Resource Management</h3>
+                            <p class="text-sm text-gray-700">Using Time-Series forecasting (Prophet, LSTM) to predict patient inflow spikes (e.g., during flu season or dengue outbreaks) to pre-allocate beds and oxygen.</p>
+                        </div>
+
+                        <div class="bg-indigo-50 p-4 rounded-lg bullet-point delay-3">
+                            <h3 class="font-bold text-indigo-700 mb-2">Smart Triage System</h3>
+                            <p class="text-sm text-gray-700">AI chatbots perform initial symptom analysis to prioritize critical patients before they reach the hospital.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 bullet-point delay-4">
+                        <h3 class="font-bold text-gray-800 mb-4 text-center">Data Flow Architecture</h3>
+                        <div class="flex flex-col items-center space-y-2">
+                            <div class="px-4 py-2 bg-gray-200 rounded-lg text-sm">Patient IoT Vitals</div>
+                            <i class="fas fa-arrow-down text-gray-400"></i>
+                            <div class="px-4 py-2 bg-blue-100 rounded-lg text-sm font-bold text-blue-700">Cloud AI Processing</div>
+                            <i class="fas fa-arrow-down text-gray-400"></i>
+                            <div class="flex space-x-2">
+                                <div class="px-3 py-2 bg-green-100 rounded-lg text-xs text-green-800">Alert Doctor</div>
+                                <div class="px-3 py-2 bg-yellow-100 rounded-lg text-xs text-yellow-800">Reserve Bed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Tech Stack -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-gray-800">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Technology Stack</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Card 1 -->
+                    <div class="p-4 bg-gray-50 rounded-xl text-center bullet-point delay-1">
+                        <i class="fab fa-python text-4xl text-yellow-500 mb-3"></i>
+                        <h3 class="font-bold text-gray-700">AI/ML Core</h3>
+                        <p class="text-xs text-gray-500 mt-2">TensorFlow, PyTorch, Scikit-learn</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="p-4 bg-gray-50 rounded-xl text-center bullet-point delay-2">
+                        <i class="fas fa-brain text-4xl text-purple-500 mb-3"></i>
+                        <h3 class="font-bold text-gray-700">Models</h3>
+                        <p class="text-xs text-gray-500 mt-2">CNNs (Vision), Transformers (NLP), XGBoost</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="p-4 bg-gray-50 rounded-xl text-center bullet-point delay-3">
+                        <i class="fas fa-cloud text-4xl text-blue-400 mb-3"></i>
+                        <h3 class="font-bold text-gray-700">Infrastructure</h3>
+                        <p class="text-xs text-gray-500 mt-2">Cloud Computing, IoT Sensors</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="p-4 bg-gray-50 rounded-xl text-center bullet-point delay-4">
+                        <i class="fas fa-shield-alt text-4xl text-green-500 mb-3"></i>
+                        <h3 class="font-bold text-gray-700">Security</h3>
+                        <p class="text-xs text-gray-500 mt-2">Blockchain for EHR, End-to-End Encryption</p>
+                    </div>
+                </div>
+                <div class="mt-8 bg-blue-900 text-white p-6 rounded-xl bullet-point delay-5">
+                    <h3 class="font-bold text-lg mb-2">Why this stack?</h3>
+                    <p class="text-sm opacity-90">This combination ensures scalability for 1.4B people, low-latency for critical diagnostics, and data sovereignty compliance with Indian laws.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Cross-National Evaluation -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-orange-500">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Cross-National Evaluation</h2>
+                <p class="text-gray-600 mb-6">Why copy-pasting global models won't work for India.</p>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse bullet-point delay-1">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700">
+                                <th class="p-4 rounded-tl-lg">Parameter</th>
+                                <th class="p-4">USA / UK</th>
+                                <th class="p-4">China</th>
+                                <th class="p-4 bg-orange-100 rounded-tr-lg border-b-2 border-orange-500">India (Sanjeevani)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-gray-100">
+                                <td class="p-4 font-semibold text-gray-600">Focus</td>
+                                <td class="p-4">High-end Precision Medicine</td>
+                                <td class="p-4">Surveillance & Speed</td>
+                                <td class="p-4 bg-orange-50 font-bold text-orange-800">Access & Affordability</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="p-4 font-semibold text-gray-600">Cost Structure</td>
+                                <td class="p-4">Very High</td>
+                                <td class="p-4">Moderate (State funded)</td>
+                                <td class="p-4 bg-orange-50 font-bold text-orange-800">Low Cost / Frugal Innovation</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="p-4 font-semibold text-gray-600">Data Homogeneity</td>
+                                <td class="p-4">High</td>
+                                <td class="p-4">High</td>
+                                <td class="p-4 bg-orange-50 font-bold text-orange-800">Extremely Diverse (Genetics/Language)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Expected Impact -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-teal-500">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Expected Impact</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="flex flex-col justify-center space-y-6">
+                        <div class="flex items-center bullet-point delay-1">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4 text-green-600 font-bold text-xl">1</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Reduced Mortality</h4>
+                                <p class="text-sm text-gray-600">Timely detection of TB and Cancer in rural areas.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center bullet-point delay-2">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4 text-blue-600 font-bold text-xl">2</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Democratization</h4>
+                                <p class="text-sm text-gray-600">Expert-level diagnostics accessible on smartphones.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center bullet-point delay-3">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4 text-purple-600 font-bold text-xl">3</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Efficiency</h4>
+                                <p class="text-sm text-gray-600">30-40% reduction in administrative overhead for hospitals.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-teal-50 rounded-xl p-6 flex flex-col items-center justify-center text-center bullet-point delay-4">
+                        <i class="fas fa-chart-line text-6xl text-teal-300 mb-4"></i>
+                        <p class="text-xl font-light text-teal-800">"Sanjeevani bridges the gap between the <span class="font-bold">Medical Haves</span> and <span class="font-bold">Have-Nots</span>."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Conclusion -->
+        <div class="slide">
+            <div class="slide-content border-t-8 border-gray-900">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Conclusion & Future Scope</h2>
+                <div class="space-y-6 text-lg text-gray-700">
+                    <p class="bullet-point delay-1">
+                        Sanjeevani x AI represents a paradigm shift from traditional infrastructure-heavy healthcare to an intelligence-driven, scalable model.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 bullet-point delay-2">
+                            <h3 class="font-bold text-gray-800 mb-2">The Vision</h3>
+                            <p class="text-sm">To integrate with the National Digital Health Mission (NDHM) and Unified Health Interface (UHI).</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 bullet-point delay-3">
+                            <h3 class="font-bold text-gray-800 mb-2">Future Scope</h3>
+                            <p class="text-sm">Expansion into mental health AI, wearable IoT integration, and genomic personalization.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Thank You / Credits -->
+        <div class="slide">
+            <div class="slide-content flex flex-col items-center justify-center text-center bg-gradient-to-br from-blue-900 to-black text-white border-none">
+                <i class="fas fa-check-circle text-6xl text-green-400 mb-6 bullet-point delay-1"></i>
+                <h1 class="text-5xl font-bold mb-8 bullet-point delay-2">Thank You</h1>
+                
+                <div class="w-full max-w-2xl border-t border-white/20 my-8 bullet-point delay-3"></div>
+                
+                <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 bullet-point delay-4 w-full max-w-3xl">
+                    <p class="text-sm text-blue-200 uppercase tracking-widest mb-2 font-semibold">Project Credits</p>
+                    <h2 class="text-xl md:text-2xl font-light leading-relaxed">
+                        Made by <span class="font-bold text-white">Sayan, Harsh, Anuj and Alok</span>
+                    </h2>
+                    <p class="text-lg md:text-xl mt-2 text-gray-300">
+                        Final year students of
+                    </p>
+                    <p class="text-xl md:text-2xl font-bold text-white mt-1">
+                        KCC INSTITUTE OF TECHNOLOGY AND MANAGEMENT
+                    </p>
+                </div>
+
+                <div class="mt-12 text-sm text-gray-500">
+                    Press 'Esc' or close tab to exit presentation
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="fas fa-arrow-left mr-2"></i> Previous
+        </button>
+        <button class="control-btn" id="nextBtn" onclick="changeSlide(1)">
+            Next <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+            
+            // Update Progress Bar
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function changeSlide(direction) {
+            const nextIndex = currentSlide + direction;
+
+            if (nextIndex >= 0 && nextIndex < slides.length) {
+                // Handle current slide
+                slides[currentSlide].classList.remove('active');
+                if (direction > 0) {
+                    slides[currentSlide].classList.add('prev');
+                } else {
+                    slides[currentSlide].classList.remove('prev');
+                }
+
+                // Handle next slide
+                currentSlide = nextIndex;
+                slides[currentSlide].classList.remove('prev');
+                slides[currentSlide].classList.add('active');
+
+                updateControls();
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        // Initialize
+        updateControls();
+    </script>
+</body>
+</html>
